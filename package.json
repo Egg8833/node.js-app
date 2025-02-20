@@ -5,6 +5,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon server.js",
+    "dev:import": "node dev-data/data/import-dev-data.js --import",
+    "dev:delete": "node dev-data/data/import-dev-data.js --delete",
     "start:prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js"
   },
