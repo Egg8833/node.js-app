@@ -21,14 +21,14 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     results: tours.length,
-    data: { tours },
+    data: { tours }
   });
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate('reviews');
 
-  console.log('tour',tour);
+  console.log('tour', tour);
 
   if (!tour) {
     console.log('tour22');
@@ -37,7 +37,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: { tour },
+    data: { tour }
   });
 });
 
@@ -46,14 +46,14 @@ exports.createTour = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    data: { tour: newTour },
+    data: { tour: newTour }
   });
 });
 
 exports.updateTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true, // 更新後返回新值
-    runValidators: true, // 驗證更新數據
+    runValidators: true // 驗證更新數據
   });
 
   if (!tour) {
@@ -62,7 +62,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: { tour },
+    data: { tour }
   });
 });
 
@@ -74,7 +74,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
 
   res.status(204).json({
     status: 'success',
-    data: null,
+    data: null
   });
 });
 
@@ -89,14 +89,14 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
         avgRating: { $avg: '$ratingsAverage' },
         avgPrice: { $avg: '$price' },
         minPrice: { $min: '$price' },
-        maxPrice: { $max: '$price' },
-      },
+        maxPrice: { $max: '$price' }
+      }
     },
-    { $sort: { avgPrice: 1 } },
+    { $sort: { avgPrice: 1 } }
   ]);
 
   res.status(200).json({
     status: 'success',
-    data: { stats },
+    data: { stats }
   });
 });

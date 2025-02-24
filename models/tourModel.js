@@ -109,11 +109,12 @@ const tourSchema = new mongoose.Schema(
         ref: 'User'
       }
     ],
-    tour:[{
-      type: mongoose.Schema.ObjectId,
-      ref: 'Tour'
-    }
-  ]
+    tour: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Tour'
+      }
+    ]
   },
   {
     toJSON: { virtuals: true },
@@ -128,8 +129,7 @@ tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',
   localField: '_id'
-
-})
+});
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 tourSchema.pre('save', function(next) {
@@ -160,9 +160,9 @@ tourSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'guides',
     select: '-__v -passwordChangedAt'
-  })
+  });
   next();
-})
+});
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
 
