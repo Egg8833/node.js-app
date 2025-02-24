@@ -51,7 +51,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next(); // If password was not modified, return next
   this.password = await bcrypt.hash(this.password, 12);
@@ -70,11 +69,14 @@ userSchema.pre(/^find/, function(next) {
   next();
 });
 
-userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+userSchema.methods.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
@@ -88,7 +90,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 
-userSchema.methods.createPasswordResetToken = function () {
+userSchema.methods.createPasswordResetToken = function() {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
   this.passwordResetToken = crypto
@@ -103,7 +105,6 @@ userSchema.methods.createPasswordResetToken = function () {
 
   return resetToken;
 };
-
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
